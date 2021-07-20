@@ -21,6 +21,8 @@ namespace dotnet5_WebAPI.Controllers
     // IF we want to support Views implementation the we extend from Controller class.
     public class CharacterController : ControllerBase
     {
+
+        // Dependecy Injection
         public ICharacterService _characterService;
 
         public CharacterController(ICharacterService characterService)
