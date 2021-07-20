@@ -5,6 +5,10 @@ using Microsoft.AspNetCore.Mvc;
 using dotnet5_WebAPI.Services.CharacterService;
 using System.Threading.Tasks;
 
+
+// ServiceResponse object is wrapped around ActionResult
+// Best practice to see the response in action
+
 namespace dotnet5_WebAPI.Controllers
 {
 
@@ -25,7 +29,7 @@ namespace dotnet5_WebAPI.Controllers
         }
 
         [HttpGet("GetAll")]
-        public async Task<ActionResult<List<Character>>> Get()
+        public async Task<ActionResult<ServiceResponse<List<Character>>>> Get()
         {
 
             // sent status code 200 (OK) and with our object (our character)
@@ -34,7 +38,7 @@ namespace dotnet5_WebAPI.Controllers
 
         // Route attribute in HttpGet to indicate the id as parameter
         [HttpGet("{id}")]
-        public async Task<ActionResult<Character>> GetSingle(int id)
+        public async Task<ActionResult<ServiceResponse<Character>>> GetSingle(int id)
         {
             return Ok(await _characterService.GetCharacterById(id));
         }
@@ -44,7 +48,7 @@ namespace dotnet5_WebAPI.Controllers
 
         // NOTE*** The JSON or the data is sent via the body of this request.
         [HttpPost]
-        public async Task<ActionResult<List<Character>>> AddCharacters(Character newCharacter)
+        public async Task<ActionResult<ServiceResponse<List<Character>>>> AddCharacters(Character newCharacter)
         {
             return Ok(await _characterService.AddCharacter(newCharacter));
         }
