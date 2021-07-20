@@ -8,5 +8,6 @@ namespace dotnet5_WebAPI.Controllers.Services.CharacterService
 
         List<Character> GetAllCharacters();
         Character GetCharacterById(int id);
+        List<Character> AddCharacter(Character character);
     }
 }
