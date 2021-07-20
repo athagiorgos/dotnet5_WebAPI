@@ -38,6 +38,10 @@ namespace dotnet5_WebAPI
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "dotnet5_WebAPI", Version = "v1" });
             });
 
+            // In order to use AutoMapper we need an instance of the AutoMapper in our Service class.
+            services.AddAutoMapper(typeof(Startup));
+
+            // Adding scope of the service interface and service implemantation
             services.AddScoped<ICharacterService, CharacterService>();
         }
 
