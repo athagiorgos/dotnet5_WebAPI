@@ -2,6 +2,8 @@ using System.Collections.Generic;
 using System.Linq;
 using dotnet5_WebAPI.Models;
 using Microsoft.AspNetCore.Mvc;
+using dotnet5_WebAPI.Services.CharacterService;
+using System.Threading.Tasks;
 
 namespace dotnet5_WebAPI.Controllers
 {
@@ -15,26 +17,26 @@ namespace dotnet5_WebAPI.Controllers
     // IF we want to support Views implementation the we extend from Controller class.
     public class CharacterController : ControllerBase
     {
-        private static List<Character> characters = new List<Character>()
-        {
-            new Character(),
-            new Character() {Id = 1, Name = "Sam"}
-        };
+        public ICharacterService _characterService;
 
+        public CharacterController(ICharacterService characterService)
+        {
+            _characterService = characterService;
+        }
 
         [HttpGet("GetAll")]
-        public ActionResult<List<Character>> Get()
+        public async Task<ActionResult<List<Character>>> Get()
         {
 
             // sent status code 200 (OK) and with our object (our character)
-            return Ok(characters);
+            return Ok(await _characterService.GetAllCharacters());
         }
 
         // Route attribute in HttpGet to indicate the id as parameter
         [HttpGet("{id}")]
-        public ActionResult<Character> GetSingle(int id)
+        public async Task<ActionResult<Character>> GetSingle(int id)
         {
-            return Ok(characters.FirstOrDefault(c => c.Id == id));
+            return Ok(await _characterService.GetCharacterById(id));
         }
 
 
@@ -42,10 +44,9 @@ namespace dotnet5_WebAPI.Controllers
 
         // NOTE*** The JSON or the data is sent via the body of this request.
         [HttpPost]
-        public ActionResult<List<Character>> AddCharacters(Character newCharacter)
+        public async Task<ActionResult<List<Character>>> AddCharacters(Character newCharacter)
         {
-            characters.Add(newCharacter);
-            return Ok(characters);
+            return Ok(await _characterService.AddCharacter(newCharacter));
         }
     }
 }
