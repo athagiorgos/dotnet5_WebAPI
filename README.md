@@ -9,6 +9,6 @@ dotnet add package Microsoft.EntityFrameworkCore.Design,
 dotnet tool install --global dotnet-ef.
 To update and query the database, a schema is ready (migration has been created and exists in files).
 Execute: dotnet ef database update.
-***NOTE: In appsettings.json in ConnectionStrings the DeafaultConnection configuration is set to connect to SQLEXPRESS.
+***NOTE: In appsettings.json in ConnectionStrings the DefaultConnection configuration is set to connect to SQLEXPRESS.
 You can change the database and table name in there.***
 Enjoy!!!
