@@ -17,11 +17,11 @@ namespace dotnet5_WebAPI.Services.CharacterService
     {
 
         // Dummy list of characters
-        private static List<Character> characters = new List<Character>()
-        {
-            new Character(),
-            new Character() {Id = 1, Name = "Sam"}
-        };
+        // private static List<Character> characters = new List<Character>()
+        // {
+        //     new Character(),
+        //     new Character() {Id = 1, Name = "Sam"}
+        // };
 
         // Injecting an Imapper interface instance to implement methods
         // Passing the constructor the DataContext object parameter to initialize an instance of the database 
@@ -62,13 +62,14 @@ namespace dotnet5_WebAPI.Services.CharacterService
             {
 
                 // First will throw an exception if not found
-                Character character = characters.First(c => c.Id == id);
+                Character character = await _context.Characters.FirstAsync(c => c.Id == id);
 
-                characters.Remove(character);
+                _context.Characters.Remove(character);
 
+                await _context.SaveChangesAsync();
 
                 // Again mapping every character to a GetCharacterDto after updating the list
-                serviceResponse.Data = characters.Select(c => _mapper.Map<GetCharacterDto>(c)).ToList();
+                serviceResponse.Data = _context.Characters.Select(c => _mapper.Map<GetCharacterDto>(c)).ToList();
 
             }
             catch (Exception ex)
@@ -110,14 +111,19 @@ namespace dotnet5_WebAPI.Services.CharacterService
 
             try
             {
-                Character character = characters.FirstOrDefault(c => c.Id == updateCharacter.Id);
+                Character character = await _context.Characters.FirstOrDefaultAsync(c => c.Id == updateCharacter.Id);
 
+
+                // We update manually each and every property so that the values don't revert 
+                // to default when updating the entity(object)
                 character.Name = updateCharacter.Name;
                 character.HitPoints = updateCharacter.HitPoints;
                 character.Strength = updateCharacter.Strength;
                 character.Defense = updateCharacter.Defense;
                 character.Intelligence = updateCharacter.Intelligence;
                 character.Class = updateCharacter.Class;
+
+                await _context.SaveChangesAsync();
 
                 serviceResponse.Data = _mapper.Map<GetCharacterDto>(character);
 
