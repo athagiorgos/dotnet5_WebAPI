@@ -63,12 +63,25 @@ namespace dotnet5_WebAPI.Controllers
             // Checking wether response is null (if object does not exist response will be null)
             var response = await _characterService.UpdateCharacter(updateCharacterDto);
 
-            if (response == null)
+            if (response.Data == null)
             {
                 return NotFound(response);
             }
 
             return Ok(await _characterService.UpdateCharacter(updateCharacterDto));
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<ActionResult<ServiceResponse<List<GetCharacterDto>>>> Delete(int id)
+        {
+            var response = await _characterService.DeleteCharacter(id);
+
+            if (response.Data == null)
+            {
+                return NotFound(response);
+            }
+
+            return Ok(await _characterService.DeleteCharacter(id));
         }
     }
 }
