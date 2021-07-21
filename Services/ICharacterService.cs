@@ -17,5 +17,9 @@ namespace dotnet5_WebAPI.Services.CharacterService
 
         // param type is AddCharacterDto, but method returns <List<GetCharacterDto>> after adding object
         Task<ServiceResponse<List<GetCharacterDto>>> AddCharacter(AddCharacterDto character);
+
+        Task<ServiceResponse<GetCharacterDto>> UpdateCharacter(UpdateCharacterDto updateCharacter);
+
+        Task<ServiceResponse<List<GetCharacterDto>>> DeleteCharacter(int id);
     }
 }

@@ -10,6 +10,6 @@ namespace dotnet5_WebAPI.Models
 
         public bool Success { get; set; } = true;
 
-        public string message { get; set; } = null;
+        public string Message { get; set; } = null;
     }
 }

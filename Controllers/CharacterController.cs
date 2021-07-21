@@ -55,5 +55,20 @@ namespace dotnet5_WebAPI.Controllers
         {
             return Ok(await _characterService.AddCharacter(newCharacter));
         }
+
+        [HttpPut]
+        public async Task<ActionResult<ServiceResponse<GetCharacterDto>>> UpdateCharacter(UpdateCharacterDto updateCharacterDto)
+        {
+
+            // Checking wether response is null (if object does not exist response will be null)
+            var response = await _characterService.UpdateCharacter(updateCharacterDto);
+
+            if (response == null)
+            {
+                return NotFound(response);
+            }
+
+            return Ok(await _characterService.UpdateCharacter(updateCharacterDto));
+        }
     }
 }
