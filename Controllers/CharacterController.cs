@@ -27,8 +27,6 @@ namespace dotnet5_WebAPI.Controllers
         // Dependecy Injection
         public ICharacterService _characterService;
 
-        private readonly DataContext _context;
-
         public CharacterController(ICharacterService characterService)
         {
             _characterService = characterService;
