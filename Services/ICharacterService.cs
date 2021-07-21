@@ -13,6 +13,6 @@ namespace dotnet5_WebAPI.Services.CharacterService
         // Wrapping the ServiceResponse object in every method return type.
         Task<ServiceResponse<List<GetCharacterDto>>> GetAllCharacters();
         Task<ServiceResponse<GetCharacterDto>> GetCharacterById(int id);
-        Task<ServiceResponse<List<AddCharacterDto>>> AddCharacter(AddCharacterDto character);
+        Task<ServiceResponse<List<GetCharacterDto>>> AddCharacter(AddCharacterDto character);
     }
 }

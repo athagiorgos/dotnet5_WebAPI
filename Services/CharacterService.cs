@@ -27,14 +27,14 @@ namespace dotnet5_WebAPI.Services.CharacterService
 
 
         // NOTE**** IMPLEMANTING AutoMapper to every Http method to map each character object to a GetCharacterDto object
-        public async Task<ServiceResponse<List<AddCharacterDto>>> AddCharacter(AddCharacterDto newCharacter)
+        public async Task<ServiceResponse<List<GetCharacterDto>>> AddCharacter(AddCharacterDto newCharacter)
         {
 
             // Mapping the new added character object
             // then converting the response to a list
-            var serviceResponse = new ServiceResponse<List<AddCharacterDto>>();
+            var serviceResponse = new ServiceResponse<List<GetCharacterDto>>();
             characters.Add(_mapper.Map<Character>(newCharacter));
-            serviceResponse.Data = characters.Select(c => _mapper.Map<AddCharacterDto>(c)).ToList();
+            serviceResponse.Data = characters.Select(c => _mapper.Map<GetCharacterDto>(c)).ToList();
             return serviceResponse;
         }
 
@@ -47,6 +47,8 @@ namespace dotnet5_WebAPI.Services.CharacterService
 
         public async Task<ServiceResponse<GetCharacterDto>> GetCharacterById(int id)
         {
+
+            // The parameter of Map function is the actual object that will be mapped
             var serviceResponse = new ServiceResponse<GetCharacterDto>();
             serviceResponse.Data = _mapper.Map<GetCharacterDto>(characters.FirstOrDefault(c => c.Id == id));
             return serviceResponse;
