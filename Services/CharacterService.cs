@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using dotnet5_WebAPI.Data;
 using dotnet5_WebAPI.Dtos.Character;
 using dotnet5_WebAPI.Models;
+using Microsoft.EntityFrameworkCore;
 
 // With the use of async and the Task interface we make the methods asynchrnous
 
@@ -22,10 +24,13 @@ namespace dotnet5_WebAPI.Services.CharacterService
         };
 
         // Injecting an Imapper interface instance to implement methods
+        // Passing the constructor the DataContext object parameter to initialize an instance of the database 
         private readonly IMapper _mapper;
+        private readonly DataContext _context;
 
-        public CharacterService(IMapper mapper)
+        public CharacterService(IMapper mapper, DataContext context)
         {
+            _context = context;
             _mapper = mapper;
 
         }
@@ -38,15 +43,14 @@ namespace dotnet5_WebAPI.Services.CharacterService
             // Mapping the new added character object
             // then converting the response to a list
             var serviceResponse = new ServiceResponse<List<GetCharacterDto>>();
-            // map the given AddCharacterDto object to a Character object
+            // Map the given AddCharacterDto object to a Character object
             Character character = _mapper.Map<Character>(newCharacter);
-            // find the maximum id of the already saved object and increment it by 1. The pass it
-            // as the id of the new object 
-            character.Id = characters.Max(c => c.Id) + 1;
-            // add character to list
-            characters.Add(character);
-            // mapping every object to a GetCharacterDto object
-            serviceResponse.Data = characters.Select(c => _mapper.Map<GetCharacterDto>(c)).ToList();
+            // Add character to list
+            _context.Characters.Add(character);
+            await _context.SaveChangesAsync();
+            // Mapping every object to a GetCharacterDto object
+            // Asynchrnous
+            serviceResponse.Data = await _context.Characters.Select(c => _mapper.Map<GetCharacterDto>(c)).ToListAsync();
             return serviceResponse;
         }
 
@@ -78,8 +82,12 @@ namespace dotnet5_WebAPI.Services.CharacterService
         public async Task<ServiceResponse<List<GetCharacterDto>>> GetAllCharacters()
         {
             var serviceResponse = new ServiceResponse<List<GetCharacterDto>>();
+
+            // We get all the objects from the database
+            var dbCharacters = await _context.Characters.ToListAsync();
             // Same as the above method but now mapping every object to a GetCharacterDto object
-            serviceResponse.Data = characters.Select(c => _mapper.Map<GetCharacterDto>(c)).ToList();
+            // using dbCharacters since we work with the database
+            serviceResponse.Data = dbCharacters.Select(c => _mapper.Map<GetCharacterDto>(c)).ToList();
             return serviceResponse;
         }
 
@@ -88,9 +96,11 @@ namespace dotnet5_WebAPI.Services.CharacterService
 
             // The parameter of Map function is the actual object that will be mapped
             var serviceResponse = new ServiceResponse<GetCharacterDto>();
+            // Getting the character with the given id from the database
+            var dbCharacter = await _context.Characters.FirstOrDefaultAsync(c => c.Id == id);
             // Mapping the object to be returned from the list with the given id
             // to a GetCharacterDto object type
-            serviceResponse.Data = _mapper.Map<GetCharacterDto>(characters.FirstOrDefault(c => c.Id == id));
+            serviceResponse.Data = _mapper.Map<GetCharacterDto>(dbCharacter);
             return serviceResponse;
         }
 

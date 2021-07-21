@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using dotnet5_WebAPI.Services.CharacterService;
 using System.Threading.Tasks;
 using dotnet5_WebAPI.Dtos.Character;
+using dotnet5_WebAPI.Data;
 
 
 // ServiceResponse object is wrapped around ActionResult
@@ -25,6 +26,8 @@ namespace dotnet5_WebAPI.Controllers
 
         // Dependecy Injection
         public ICharacterService _characterService;
+
+        private readonly DataContext _context;
 
         public CharacterController(ICharacterService characterService)
         {
