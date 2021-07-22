@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using dotnet5_WebAPI.Data;
 using dotnet5_WebAPI.Services.CharacterService;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -13,6 +14,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 
 namespace dotnet5_WebAPI
@@ -48,8 +50,20 @@ namespace dotnet5_WebAPI
 
             // Adding scope of the service interface and service implemantation
             services.AddScoped<ICharacterService, CharacterService>();
-
             services.AddScoped<IAuthRepository, AuthRepository>();
+
+            // Authentication scheme
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+            .AddJwtBearer(options =>
+            {
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(System.Text.Encoding.ASCII.GetBytes(Configuration.GetSection("AppSettings:Token").Value)),
+                    ValidateIssuer = false,
+                    ValidateAudience = false
+                };
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -69,6 +83,9 @@ namespace dotnet5_WebAPI
             app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            // Has to be above UseAuthorization
+            app.UseAuthentication();
 
             app.UseAuthorization();
 

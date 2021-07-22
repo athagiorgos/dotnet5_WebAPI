@@ -6,6 +6,7 @@ using dotnet5_WebAPI.Services.CharacterService;
 using System.Threading.Tasks;
 using dotnet5_WebAPI.Dtos.Character;
 using dotnet5_WebAPI.Data;
+using Microsoft.AspNetCore.Authorization;
 
 
 // ServiceResponse object is wrapped around ActionResult
@@ -14,6 +15,9 @@ using dotnet5_WebAPI.Data;
 namespace dotnet5_WebAPI.Controllers
 {
 
+    // Makes the whole controller secure. 
+    // Anyone who wants to access any method from this controller needs to be authenticated
+    [Authorize]
     [ApiController]
 
     // This means that the controller can be accesed by his name.
