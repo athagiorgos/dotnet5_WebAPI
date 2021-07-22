@@ -11,4 +11,6 @@ To update and query the database, a schema is ready (migration has been created 
 Execute: dotnet ef database update.
 ***NOTE: In appsettings.json in ConnectionStrings the DefaultConnection configuration is set to connect to SQLEXPRESS.
 You can change the database and table name in there. Microsoft SQL Server Management Studio is recommended.***
+UPDATE: Need to install package JwtBearer with the below command:
+dotnet add package Microsoft.AspNetCore.Authentication.JwtBearer
 Enjoy!!!
