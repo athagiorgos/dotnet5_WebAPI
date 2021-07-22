@@ -1,6 +1,11 @@
+using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using dotnet5_WebAPI.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.Tokens;
 
 namespace dotnet5_WebAPI.Data
 {
@@ -10,8 +15,12 @@ namespace dotnet5_WebAPI.Data
         // Injecting a DataContext instance
         private readonly DataContext _context;
 
-        public AuthRepository(DataContext context)
+        // Getting access with the configurator from the appsettings.json
+        private readonly IConfiguration _configuration;
+
+        public AuthRepository(DataContext context, IConfiguration configuration)
         {
+            _configuration = configuration;
             _context = context;
         }
 
@@ -33,7 +42,7 @@ namespace dotnet5_WebAPI.Data
             }
             else
             {
-                response.Data = user.Id.ToString();
+                response.Data = CreateToken(user);
             }
 
             return response;
@@ -105,6 +114,39 @@ namespace dotnet5_WebAPI.Data
 
                 return true;
             }
+        }
+
+        private string CreateToken(User user)
+        {
+
+            // With that token we can read the user id and username but NOT the password
+            var claims = new List<Claim>
+            {
+                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+                new Claim(ClaimTypes.Name, user.Username)
+            };
+
+            // This package includes types that provide support for security tokens and cryptographic operations
+            // like signing and verifying signatures
+            var key = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(_configuration.GetSection("AppSettings:Token").Value));
+
+            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
+
+
+            // Token descriptor is set with claims (user id and username), symmetric key from appsettings.json
+            // and signging credentials based on algorithm
+            var tokenDiscriptor = new SecurityTokenDescriptor
+            {
+                Subject = new ClaimsIdentity(claims),
+                Expires = System.DateTime.Now.AddDays(1),
+                SigningCredentials = creds
+            };
+
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var token = tokenHandler.CreateToken(tokenDiscriptor);
+
+            // Serializing the security token into a json web token and return it as string
+            return tokenHandler.WriteToken(token);
         }
     }
 }
