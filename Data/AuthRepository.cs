@@ -11,12 +11,30 @@ namespace dotnet5_WebAPI.Data
         public AuthRepository(DataContext context)
         {
             _context = context;
-
         }
 
-        public Task<ServiceResponse<string>> Login(string uername, string password)
+        public async Task<ServiceResponse<string>> Login(string username, string password)
         {
-            throw new System.NotImplementedException();
+            var response = new ServiceResponse<string>();
+            var user = await _context.Users.FirstOrDefaultAsync(user => user.Username.ToLower().Equals(username.ToLower()));
+
+            if (user == null)
+            {
+                response.Success = false;
+                response.Message = "User not found.";
+
+            }
+            else if (!VerifyPasswordHash(password, user.PasswordHash, user.PasswordSalt))
+            {
+                response.Success = false;
+                response.Message = "Wrong password.";
+            }
+            else
+            {
+                response.Data = user.Id.ToString();
+            }
+
+            return response;
         }
 
         public async Task<ServiceResponse<int>> Register(User user, string password)
@@ -59,9 +77,31 @@ namespace dotnet5_WebAPI.Data
             using (var hmac = new System.Security.Cryptography.HMACSHA512())
             {
                 // Return the key to use in HMAC calculation
+                // Generating a new password salt
                 passwordSalt = hmac.Key;
                 // Computing the hash value for the specified byte array
                 passwordHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
+            }
+        }
+
+
+        // We use the passwordSalt from the database and then use the compute hash method
+        private bool VerifyPasswordHash(string password, byte[] passwordHash, byte[] passwordSalt)
+        {
+            using (var hmac = new System.Security.Cryptography.HMACSHA512(passwordSalt))
+            {
+                var computedHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
+
+                // We check byte by byte the computedHash with the passwordHash to authenticate the user 
+                for (int i = 0; i < computedHash.Length; i++)
+                {
+                    if (computedHash[i] != passwordHash[i])
+                    {
+                        return false;
+                    }
+                }
+
+                return true;
             }
         }
     }
