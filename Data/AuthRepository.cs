@@ -6,6 +6,8 @@ namespace dotnet5_WebAPI.Data
 {
     public class AuthRepository : IAuthRepository
     {
+
+        // Injecting a DataContext instance
         private readonly DataContext _context;
 
         public AuthRepository(DataContext context)

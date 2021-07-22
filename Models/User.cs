@@ -11,7 +11,7 @@ namespace dotnet5_WebAPI.Models
 
         public string Username { get; set; }
 
-        // Hash calue of the password
+        // Hash value of the password
         public byte[] PasswordHash { get; set; }
 
         // Salt to create a unique password hash
