@@ -15,5 +15,10 @@ namespace dotnet5_WebAPI.Models
         public int Intelligence { get; set; } = 10;
 
         public RpgClass Class { get; set; } = RpgClass.Knight;
+
+
+        // Defining the user of this character
+        // ONE-TO-MANY relationship
+        public User User { get; set; }
     }
 }

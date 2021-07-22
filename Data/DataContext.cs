@@ -18,5 +18,9 @@ namespace dotnet5_WebAPI.Data
         // name of DbSet is usually pluralizing the name of the entity(model)
         // this way entity framework knows what tables it should create
         public DbSet<Character> Characters { get; set; }
+
+        // Same here for users authentication
+        public DbSet<User> Users { get; set; }
+
     }
 }

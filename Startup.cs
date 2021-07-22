@@ -48,6 +48,8 @@ namespace dotnet5_WebAPI
 
             // Adding scope of the service interface and service implemantation
             services.AddScoped<ICharacterService, CharacterService>();
+
+            services.AddScoped<IAuthRepository, AuthRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
