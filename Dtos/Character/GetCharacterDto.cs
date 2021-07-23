@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using dotnet5_WebAPI.Dtos.Character.Skill;
 using dotnet5_WebAPI.Dtos.Character.Weapon;
 using dotnet5_WebAPI.Models;
 
@@ -20,5 +22,7 @@ namespace dotnet5_WebAPI.Dtos.Character
         public RpgClass Class { get; set; } = RpgClass.Knight;
 
         public GetWeaponDto Weapon { get; set; }
+
+        public List<GetSkillDto> Skills { get; set; }
     }
 }

@@ -23,7 +23,7 @@ namespace dotnet5_WebAPI.Models
         // ONE-TO-MANY relationship
         public User User { get; set; }
 
-        public Weapon weapon { get; set; }
+        public Weapon Weapon { get; set; }
 
         // MANY-TO-MANY
         public List<Skill> Skills { get; set; }
