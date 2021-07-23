@@ -76,14 +76,26 @@ namespace dotnet5_WebAPI.Services.CharacterService
             {
 
                 // First will throw an exception if not found
-                Character character = await _context.Characters.FirstAsync(c => c.Id == id);
+                Character character = await _context.Characters.FirstOrDefaultAsync(c => c.Id == id && c.User.Id == GetUserId());
 
-                _context.Characters.Remove(character);
+                if (character != null)
+                {
 
-                await _context.SaveChangesAsync();
+                    _context.Characters.Remove(character);
 
-                // Again mapping every character to a GetCharacterDto after updating the list
-                serviceResponse.Data = _context.Characters.Select(c => _mapper.Map<GetCharacterDto>(c)).ToList();
+                    await _context.SaveChangesAsync();
+
+                    // Again mapping every character to a GetCharacterDto after updating the list
+                    serviceResponse.Data = _context.Characters
+                    .Where(c => c.User.Id == GetUserId())
+                    .Select(c => _mapper.Map<GetCharacterDto>(c)).ToList();
+
+                }
+                else
+                {
+                    serviceResponse.Success = false;
+                    serviceResponse.Message = " Character not found";
+                }
 
             }
             catch (Exception ex)
@@ -113,7 +125,7 @@ namespace dotnet5_WebAPI.Services.CharacterService
             // The parameter of Map function is the actual object that will be mapped
             var serviceResponse = new ServiceResponse<GetCharacterDto>();
             // Getting the character with the given id from the database
-            var dbCharacter = await _context.Characters.FirstOrDefaultAsync(c => c.Id == id);
+            var dbCharacter = await _context.Characters.FirstOrDefaultAsync(c => c.Id == id && c.User.Id == GetUserId()); // Only the logged in user
             // Mapping the object to be returned from the list with the given id
             // to a GetCharacterDto object type
             serviceResponse.Data = _mapper.Map<GetCharacterDto>(dbCharacter);
@@ -126,21 +138,30 @@ namespace dotnet5_WebAPI.Services.CharacterService
 
             try
             {
-                Character character = await _context.Characters.FirstOrDefaultAsync(c => c.Id == updateCharacter.Id);
+                Character character = await _context.Characters
+                    .Include(c => c.User)
+                    .FirstOrDefaultAsync(c => c.Id == updateCharacter.Id);
+                if (character.User.Id == GetUserId())
+                {
+                    // We update manually each and every property so that the values don't revert 
+                    // to default when updating the entity(object)
+                    character.Name = updateCharacter.Name;
+                    character.HitPoints = updateCharacter.HitPoints;
+                    character.Strength = updateCharacter.Strength;
+                    character.Defense = updateCharacter.Defense;
+                    character.Intelligence = updateCharacter.Intelligence;
+                    character.Class = updateCharacter.Class;
 
+                    await _context.SaveChangesAsync();
 
-                // We update manually each and every property so that the values don't revert 
-                // to default when updating the entity(object)
-                character.Name = updateCharacter.Name;
-                character.HitPoints = updateCharacter.HitPoints;
-                character.Strength = updateCharacter.Strength;
-                character.Defense = updateCharacter.Defense;
-                character.Intelligence = updateCharacter.Intelligence;
-                character.Class = updateCharacter.Class;
+                    serviceResponse.Data = _mapper.Map<GetCharacterDto>(character);
 
-                await _context.SaveChangesAsync();
-
-                serviceResponse.Data = _mapper.Map<GetCharacterDto>(character);
+                }
+                else
+                {
+                    serviceResponse.Success = false;
+                    serviceResponse.Message = "Character not found.";
+                }
 
             }
             catch (Exception ex)
