@@ -43,10 +43,8 @@ namespace dotnet5_WebAPI.Controllers
         public async Task<ActionResult<ServiceResponse<List<GetCharacterDto>>>> Get()
         {
 
-            // Getting the id of the user so that we get the characters based on that user
-            int id = int.Parse(User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value);
             // sent status code 200 (OK) and with our object (our character)
-            return Ok(await _characterService.GetAllCharacters(id));
+            return Ok(await _characterService.GetAllCharacters());
         }
 
         // Route attribute in HttpGet to indicate the id as parameter
