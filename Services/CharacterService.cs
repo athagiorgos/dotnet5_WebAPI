@@ -80,12 +80,13 @@ namespace dotnet5_WebAPI.Services.CharacterService
             return serviceResponse;
         }
 
-        public async Task<ServiceResponse<List<GetCharacterDto>>> GetAllCharacters()
+        public async Task<ServiceResponse<List<GetCharacterDto>>> GetAllCharacters(int userId)
         {
             var serviceResponse = new ServiceResponse<List<GetCharacterDto>>();
 
             // We get all the objects from the database
-            var dbCharacters = await _context.Characters.ToListAsync();
+            // From this specific user
+            var dbCharacters = await _context.Characters.Where(c => c.User.Id == userId).ToListAsync();
             // Same as the above method but now mapping every object to a GetCharacterDto object
             // using dbCharacters since we work with the database
             serviceResponse.Data = dbCharacters.Select(c => _mapper.Map<GetCharacterDto>(c)).ToList();

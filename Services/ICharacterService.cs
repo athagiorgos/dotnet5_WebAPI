@@ -11,7 +11,7 @@ namespace dotnet5_WebAPI.Services.CharacterService
         // Here we define the method that the service class should implement
 
         // Wrapping the ServiceResponse object in every method return type.
-        Task<ServiceResponse<List<GetCharacterDto>>> GetAllCharacters();
+        Task<ServiceResponse<List<GetCharacterDto>>> GetAllCharacters(int userId);
         Task<ServiceResponse<GetCharacterDto>> GetCharacterById(int id);
 
 

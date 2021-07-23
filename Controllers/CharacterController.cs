@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using dotnet5_WebAPI.Dtos.Character;
 using dotnet5_WebAPI.Data;
 using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
 
 
 // ServiceResponse object is wrapped around ActionResult
@@ -36,12 +37,16 @@ namespace dotnet5_WebAPI.Controllers
             _characterService = characterService;
         }
 
+        // Attribute here means that this method is the one that can be accessed without authorization
+        //[AllowAnonymous]
         [HttpGet("GetAll")]
         public async Task<ActionResult<ServiceResponse<List<GetCharacterDto>>>> Get()
         {
 
+            // Getting the id of the user so that we get the characters based on that user
+            int id = int.Parse(User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value);
             // sent status code 200 (OK) and with our object (our character)
-            return Ok(await _characterService.GetAllCharacters());
+            return Ok(await _characterService.GetAllCharacters(id));
         }
 
         // Route attribute in HttpGet to indicate the id as parameter
