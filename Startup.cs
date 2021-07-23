@@ -48,7 +48,7 @@ namespace dotnet5_WebAPI
                 // Now the authorization key is sent to the request header
                 c.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
                 {
-                    Description = "Standard Authorizayion header using the Bearer example. Example: \"bearer {token}\"",
+                    Description = "Standard Authorization header using the Bearer example. Example: \"bearer {token}\"",
                     In = ParameterLocation.Header,
                     Name = "Authorization",
                     Type = SecuritySchemeType.ApiKey
