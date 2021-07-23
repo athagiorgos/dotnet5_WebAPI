@@ -23,5 +23,7 @@ namespace dotnet5_WebAPI.Data
 
         public DbSet<Weapon> Weapons { get; set; }
 
+        public DbSet<Skill> Skills { get; set; }
+
     }
 }

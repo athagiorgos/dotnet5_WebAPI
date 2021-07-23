@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 namespace dotnet5_WebAPI.Models
 {
     public class Character
@@ -22,5 +24,7 @@ namespace dotnet5_WebAPI.Models
         public User User { get; set; }
 
         public Weapon weapon { get; set; }
+
+        public List<Skill> Skills { get; set; }
     }
 }
