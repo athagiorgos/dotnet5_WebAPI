@@ -13,7 +13,6 @@ namespace dotnet5_WebAPI.Data
 
         }
 
-
         // enables us to save and query our model class
         // name of DbSet is usually pluralizing the name of the entity(model)
         // this way entity framework knows what tables it should create
@@ -21,6 +20,8 @@ namespace dotnet5_WebAPI.Data
 
         // Same here for users authentication
         public DbSet<User> Users { get; set; }
+
+        public DbSet<Weapon> Weapons { get; set; }
 
     }
 }

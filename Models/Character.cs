@@ -20,5 +20,7 @@ namespace dotnet5_WebAPI.Models
         // Defining the user of this character
         // ONE-TO-MANY relationship
         public User User { get; set; }
+
+        public Weapon weapon { get; set; }
     }
 }
