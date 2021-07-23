@@ -25,6 +25,7 @@ namespace dotnet5_WebAPI.Models
 
         public Weapon weapon { get; set; }
 
+        // MANY-TO-MANY
         public List<Skill> Skills { get; set; }
     }
 }

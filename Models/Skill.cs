@@ -10,6 +10,8 @@ namespace dotnet5_WebAPI.Models
 
         public int Damage { get; set; }
 
+
+        // MANY-TO-MANY
         public List<Character> Characters { get; set; }
     }
 }
