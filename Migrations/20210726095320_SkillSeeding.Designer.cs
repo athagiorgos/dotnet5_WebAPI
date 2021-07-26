@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using dotnet5_WebAPI.Data;
 
 namespace dotnet5_WebAPI.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20210726095320_SkillSeeding")]
+    partial class SkillSeeding
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -44,13 +46,7 @@ namespace dotnet5_WebAPI.Migrations
                     b.Property<int>("Class")
                         .HasColumnType("int");
 
-                    b.Property<int>("Defeats")
-                        .HasColumnType("int");
-
                     b.Property<int>("Defense")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Fights")
                         .HasColumnType("int");
 
                     b.Property<int>("HitPoints")
@@ -66,9 +62,6 @@ namespace dotnet5_WebAPI.Migrations
                         .HasColumnType("int");
 
                     b.Property<int?>("UserId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Victories")
                         .HasColumnType("int");
 
                     b.HasKey("Id");

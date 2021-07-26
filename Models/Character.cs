@@ -27,5 +27,9 @@ namespace dotnet5_WebAPI.Models
 
         // MANY-TO-MANY
         public List<Skill> Skills { get; set; }
+
+        public int Fights { get; set; }
+        public int Victories { get; set; }
+        public int Defeats { get; set; }
     }
 }

@@ -10,8 +10,8 @@ using dotnet5_WebAPI.Data;
 namespace dotnet5_WebAPI.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20210723124554_SkillSeeding")]
-    partial class SkillSeeding
+    [Migration("20210726095708_FightProperties")]
+    partial class FightProperties
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -46,7 +46,13 @@ namespace dotnet5_WebAPI.Migrations
                     b.Property<int>("Class")
                         .HasColumnType("int");
 
+                    b.Property<int>("Defeats")
+                        .HasColumnType("int");
+
                     b.Property<int>("Defense")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Fights")
                         .HasColumnType("int");
 
                     b.Property<int>("HitPoints")
@@ -62,6 +68,9 @@ namespace dotnet5_WebAPI.Migrations
                         .HasColumnType("int");
 
                     b.Property<int?>("UserId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Victories")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -91,19 +100,19 @@ namespace dotnet5_WebAPI.Migrations
                     b.HasData(
                         new
                         {
-                            Id = 1,
+                            Id = 4,
                             Damage = 30,
                             Name = "Fireball"
                         },
                         new
                         {
-                            Id = 2,
+                            Id = 5,
                             Damage = 20,
                             Name = "Frenzy"
                         },
                         new
                         {
-                            Id = 3,
+                            Id = 6,
                             Damage = 50,
                             Name = "Blizzard"
                         });
@@ -181,7 +190,7 @@ namespace dotnet5_WebAPI.Migrations
             modelBuilder.Entity("dotnet5_WebAPI.Models.Weapon", b =>
                 {
                     b.HasOne("dotnet5_WebAPI.Models.Character", "Character")
-                        .WithOne("weapon")
+                        .WithOne("Weapon")
                         .HasForeignKey("dotnet5_WebAPI.Models.Weapon", "CharacterId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -191,7 +200,7 @@ namespace dotnet5_WebAPI.Migrations
 
             modelBuilder.Entity("dotnet5_WebAPI.Models.Character", b =>
                 {
-                    b.Navigation("weapon");
+                    b.Navigation("Weapon");
                 });
 
             modelBuilder.Entity("dotnet5_WebAPI.Models.User", b =>

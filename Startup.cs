@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using dotnet5_WebAPI.Data;
 using dotnet5_WebAPI.Services.CharacterService;
+using dotnet5_WebAPI.Services.FightService;
 using dotnet5_WebAPI.Services.WeaponService;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
@@ -65,6 +66,7 @@ namespace dotnet5_WebAPI
             services.AddScoped<ICharacterService, CharacterService>();
             services.AddScoped<IAuthRepository, AuthRepository>();
             services.AddScoped<IWeaponService, WeaponService>();
+            services.AddScoped<IFightService, FightService>();
 
             // Authentication scheme
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
