@@ -63,8 +63,8 @@ namespace dotnet5_WebAPI.Services.CharacterService
             // Mapping every object to a GetCharacterDto object
             // Asynchrnous
             serviceResponse.Data = await _context.Characters
-            .Where(c => c.User.Id == GetUserId()) // Verifying the logged in user
-            .Select(c => _mapper.Map<GetCharacterDto>(c)).ToListAsync();
+                .Where(c => c.User.Id == GetUserId()) // Verifying the logged in user
+                .Select(c => _mapper.Map<GetCharacterDto>(c)).ToListAsync();
             return serviceResponse;
         }
 
@@ -87,8 +87,8 @@ namespace dotnet5_WebAPI.Services.CharacterService
 
                     // Again mapping every character to a GetCharacterDto after updating the list
                     serviceResponse.Data = _context.Characters
-                    .Where(c => c.User.Id == GetUserId())
-                    .Select(c => _mapper.Map<GetCharacterDto>(c)).ToList();
+                        .Where(c => c.User.Id == GetUserId())
+                        .Select(c => _mapper.Map<GetCharacterDto>(c)).ToList();
 
                 }
                 else
@@ -112,7 +112,10 @@ namespace dotnet5_WebAPI.Services.CharacterService
 
             // We get all the objects from the database
             // From this specific user
-            var dbCharacters = await _context.Characters.Where(c => c.User.Id == GetUserId()).ToListAsync(); // Based on the logged in user
+            var dbCharacters = await _context.Characters
+                    .Include(c => c.Weapon)
+                    .Include(c => c.Skills)
+                    .Where(c => c.User.Id == GetUserId()).ToListAsync(); // Based on the logged in user
             // Same as the above method but now mapping every object to a GetCharacterDto object
             // using dbCharacters since we work with the database
             serviceResponse.Data = dbCharacters.Select(c => _mapper.Map<GetCharacterDto>(c)).ToList();
@@ -125,7 +128,10 @@ namespace dotnet5_WebAPI.Services.CharacterService
             // The parameter of Map function is the actual object that will be mapped
             var serviceResponse = new ServiceResponse<GetCharacterDto>();
             // Getting the character with the given id from the database
-            var dbCharacter = await _context.Characters.FirstOrDefaultAsync(c => c.Id == id && c.User.Id == GetUserId()); // Only the logged in user
+            var dbCharacter = await _context.Characters
+                    .Include(c => c.Weapon)
+                    .Include(c => c.Skills)
+                    .FirstOrDefaultAsync(c => c.Id == id && c.User.Id == GetUserId()); // Only the logged in user
             // Mapping the object to be returned from the list with the given id
             // to a GetCharacterDto object type
             serviceResponse.Data = _mapper.Map<GetCharacterDto>(dbCharacter);
@@ -143,7 +149,7 @@ namespace dotnet5_WebAPI.Services.CharacterService
                     .FirstOrDefaultAsync(c => c.Id == updateCharacter.Id);
                 if (character.User.Id == GetUserId())
                 {
-                    // We update manually each and every property so that the values don't revert 
+                    // We update manually each and every property. Values that are not updated will revert 
                     // to default when updating the entity(object)
                     character.Name = updateCharacter.Name;
                     character.HitPoints = updateCharacter.HitPoints;
@@ -191,6 +197,20 @@ namespace dotnet5_WebAPI.Services.CharacterService
                     serviceResponse.Message = "Character not found.";
                     return serviceResponse;
                 }
+
+                var skill = await _context.Skills.FirstOrDefaultAsync(s => s.Id == newCharacterSkill.SkillId);
+
+                if (skill == null)
+                {
+                    serviceResponse.Success = false;
+                    serviceResponse.Message = "Skill not found.";
+                    return serviceResponse;
+                }
+
+                character.Skills.Add(skill);
+                await _context.SaveChangesAsync();
+
+                serviceResponse.Data = _mapper.Map<GetCharacterDto>(character);
             }
             catch (Exception ex)
             {
