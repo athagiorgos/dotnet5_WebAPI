@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using dotnet5_WebAPI.Data;
 using dotnet5_WebAPI.Dtos.Character;
-using dotnet5_WebAPI.Dtos.Character.Weapon;
+using dotnet5_WebAPI.Dtos.Weapon;
 using dotnet5_WebAPI.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;

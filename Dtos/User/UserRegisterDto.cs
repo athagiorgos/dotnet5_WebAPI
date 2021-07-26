@@ -1,6 +1,6 @@
-namespace dotnet5_WebAPI.Dtos.Character.User
+namespace dotnet5_WebAPI.Dtos.User
 {
-    public class UserLoginDto
+    public class UserRegisterDto
     {
         public string Username { get; set; }
         public string Password { get; set; }

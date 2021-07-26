@@ -1,5 +1,5 @@
 using System.Threading.Tasks;
-using dotnet5_WebAPI.Dtos.Character.Fight;
+using dotnet5_WebAPI.Dtos.Fight;
 using dotnet5_WebAPI.Models;
 using dotnet5_WebAPI.Services.FightService;
 using Microsoft.AspNetCore.Mvc;

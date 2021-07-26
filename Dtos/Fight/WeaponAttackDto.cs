@@ -1,4 +1,4 @@
-namespace dotnet5_WebAPI.Dtos.Character.Fight
+namespace dotnet5_WebAPI.Dtos.Fight
 {
     public class WeaponAttackDto
     {

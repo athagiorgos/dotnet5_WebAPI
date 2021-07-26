@@ -1,7 +1,7 @@
 using System.Collections.Generic;
-using dotnet5_WebAPI.Dtos.Character.Skill;
-using dotnet5_WebAPI.Dtos.Character.Weapon;
 using dotnet5_WebAPI.Models;
+using dotnet5_WebAPI.Dtos.Weapon;
+using dotnet5_WebAPI.Dtos.Skill;
 
 namespace dotnet5_WebAPI.Dtos.Character
 {

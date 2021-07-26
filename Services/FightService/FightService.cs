@@ -2,7 +2,7 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using dotnet5_WebAPI.Data;
-using dotnet5_WebAPI.Dtos.Character.Fight;
+using dotnet5_WebAPI.Dtos.Fight;
 using dotnet5_WebAPI.Models;
 using Microsoft.EntityFrameworkCore;
 

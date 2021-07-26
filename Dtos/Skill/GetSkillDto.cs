@@ -1,4 +1,4 @@
-namespace dotnet5_WebAPI.Dtos.Character.Skill
+namespace dotnet5_WebAPI.Dtos.Skill
 {
     public class GetSkillDto
     {

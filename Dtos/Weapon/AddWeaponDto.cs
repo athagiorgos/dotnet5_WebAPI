@@ -1,4 +1,4 @@
-namespace dotnet5_WebAPI.Dtos.Character.Weapon
+namespace dotnet5_WebAPI.Dtos.Weapon
 {
     public class AddWeaponDto
     {

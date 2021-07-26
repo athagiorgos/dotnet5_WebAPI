@@ -1,6 +1,6 @@
 using System.Threading.Tasks;
 using dotnet5_WebAPI.Data;
-using dotnet5_WebAPI.Dtos.Character.User;
+using dotnet5_WebAPI.Dtos.User;
 using dotnet5_WebAPI.Models;
 using Microsoft.AspNetCore.Mvc;
 
