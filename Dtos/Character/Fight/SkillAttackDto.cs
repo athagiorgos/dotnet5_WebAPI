@@ -1,9 +1,11 @@
 namespace dotnet5_WebAPI.Dtos.Character.Fight
 {
-    public class WeaponAttackDto
+    public class SkillAttackDto
     {
         public int AttackerId { get; set; }
 
         public int OpponentId { get; set; }
+
+        public int SkillId { get; set; }
     }
 }
