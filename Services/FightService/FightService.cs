@@ -1,6 +1,8 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using dotnet5_WebAPI.Data;
 using dotnet5_WebAPI.Dtos.Fight;
 using dotnet5_WebAPI.Models;
@@ -11,8 +13,10 @@ namespace dotnet5_WebAPI.Services.FightService
     public class FightService : IFightService
     {
         private readonly DataContext _context;
-        public FightService(DataContext context)
+        private readonly IMapper _mapper;
+        public FightService(DataContext context, IMapper mapper)
         {
+            _mapper = mapper;
             _context = context;
         }
 
@@ -142,7 +146,10 @@ namespace dotnet5_WebAPI.Services.FightService
                 {
                     foreach (var attacker in characters)
                     {
+                        // opponents are the rest from the attacker
                         var opponents = characters.Where(c => c.Id != attacker.Id).ToList();
+
+                        // Randomly choosing an opponent from all the opponennts
                         var opponent = opponents[new Random().Next(opponents.Count)];
 
                         int damage = 0;
@@ -175,13 +182,38 @@ namespace dotnet5_WebAPI.Services.FightService
                         }
                     }
                 }
+
+                characters.ForEach(c =>
+                {
+                    c.Fights++;
+                    c.HitPoints = 100;
+                });
+
+                await _context.SaveChangesAsync();
             }
             catch (Exception ex)
             {
                 serviceResponse.Success = false;
                 serviceResponse.Message = ex.Message;
-                return serviceResponse;
             }
+
+            return serviceResponse;
+        }
+
+        public async Task<ServiceResponse<List<HighScoreDto>>> GetHighScore()
+        {
+            var characters = await _context.Characters
+                .Where(c => c.Fights > 0)
+                .OrderByDescending(c => c.Victories)
+                .ThenBy(c => c.Defeats)
+                .ToListAsync();
+
+            var response = new ServiceResponse<List<HighScoreDto>>
+            {
+                Data = characters.Select(c => _mapper.Map<HighScoreDto>(c)).ToList()
+            };
+
+            return response;
         }
     }
 }

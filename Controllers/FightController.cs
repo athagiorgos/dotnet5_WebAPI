@@ -35,5 +35,11 @@ namespace dotnet5_WebAPI.Controllers
         {
             return Ok(await _fightService.Fight(request));
         }
+
+        [HttpGet]
+        public async Task<ActionResult<ServiceResponse<HighScoreDto>>> GetHighScore()
+        {
+            return Ok(await _fightService.GetHighScore());
+        }
     }
 }
